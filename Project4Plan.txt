@@ -1,0 +1,4 @@
+Sarah Jomaa
+Project 4 Plan
+
+The APIs I plan on using are YouTube, iTunes, and Spotify. I want to compare the number of views a song has on YouTube, the number of plays it has on iTunes, and how many plays it has on Spotify, and display information for the song like release date, artist, and price on iTunes, and I could pull reviews for each song from iTunes. It would also be interesting to compare the price of movies on YouTube Red versus on iTunes, and, if possible, the upvotes/downvotes on YouTube versus the fresh or rotten ratings on iTunes. If I can't get the ratings from iTunes I might try IMDB, though I'm not sure yet how that will work out. I'll also try to gather information about each movie like genre and release date. For visualization, I'd like to use plotly and/or pandas.
