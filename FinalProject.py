@@ -18,3 +18,14 @@ try:
     CACHE_DICTION = json.loads(cache_contents)
 except:
     CACHE_DICTION = {}
+
+
+    # iTunes API
+
+    # get 100 song reviews
+
+
+    # Spotify API
+
+
+    # YouTube API
