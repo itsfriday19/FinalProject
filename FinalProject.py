@@ -9,7 +9,8 @@ import json
 import sqlite3
 import requests
 import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
+# from spotipy.oauth2 import SpotifyClientCredentials
+# from youtube import YouTube
 
 print ("\n\n********* NEW RUN **********\n\n")
 
@@ -46,12 +47,12 @@ def get_with_caching(base_url, params_diction, cache_diction, cache_file, omitte
 	# print ("full url: " + full_url)
 	if full_url in cache_diction:
 		# step 2
-		print ("\nIn cache. Retrieving cache data that goes along with the request for URL: " + full_url, '\n')
+		print ("\nIn cache. Retrieving cached data for URL: " + full_url, '\n')
 		return cache_diction[full_url]
 	else:
 		# step 3
 		response = requests.get(base_url, params=params_diction)
-		print ("\nNot in cache. Making a request to the API and adding saved data to cache file for URL: " + full_url, '\n')
+		print ("\nNot in cache. Making a request to the API, adding data to cache for URL: " + full_url, '\n')
 
 		# add to the cache and save it permanently
 		cache_diction[full_url] = response.text
@@ -68,116 +69,120 @@ def requestITURL(baseurl, params = {}):
 	itunes_response = get_with_caching(baseurl, params, CACHE_DICTION, CACHE_FNAME)
 	return itunes_response
 
+	# OMDb API Request
 
-   # Spotify API Request
-
-def requestSpotifyURL(baseurl, params = {}):
-	spotify_response = get_with_caching(baseurl, params, CACHE_DICTION, CACHE_FNAME)
-	return spotify_response
-
-#     # YouTube API Request
-
-# def requestYTURL(baseurl, params = {}):
-# 	youtube_response = get_with_caching(baseurl, params, CACHE_DICTION, CACHE_FNAME)
-
-
+def requestOMDbURL(baseurl, params = {}):
+	ombdb_response = get_with_caching(baseurl, params, CACHE_DICTION, CACHE_FNAME)
+	return ombdb_response
 
 	################################ iTunes Results ##################################
 
-def MakeRequestToIT(song):
+# ### Song Info ###
+# (song name, artist, price, release date, genre)
+
+print ("*** iTunes Artist's Songs Data ***\n")
+
+def MakeArtistRequestToIT(artist):
 	it_baseurl = 'https://itunes.apple.com/search?'
-	it_url_params = {'term': song, 'country' : 'US', 'entity': 'song', 'limit' : '1'}
+	it_url_params = {'term': artist, 'limit' : '19'}
 	itunes_results = requestITURL(it_baseurl, it_url_params)
 	itunes_data = json.loads(itunes_results)
 	return itunes_data
 
-# Song Info (song name, price, artist, release date, genre)
-def ExtractSongInfo(song):
-	itunes_data = MakeRequestToIT(song)["results"][0]
+def GetArtistSongs(artist):
+	itunes_data = MakeArtistRequestToIT(artist)["results"]
+	returnedSongs = []
+	for s in itunes_data:
+		song_name = s["trackName"]
+		trackPrice = s["trackPrice"]
+		artist = s["artistName"]
+		release_date = s["releaseDate"]
+		genre = s["primaryGenreName"]
+		songInfo_dict = {"song_name": song_name, "artist": artist, "trackPrice": trackPrice, "release_date": release_date, "genre": genre}
+		returnedSongs.append(songInfo_dict)
 
-	song_name = itunes_data["trackName"]
-	trackPrice = itunes_data["trackPrice"]
-	artist = itunes_data["artistName"]
-	release_date = itunes_data["releaseDate"]
+	return (returnedSongs)
+
+askArtist = input("Pick an artist to search: ")
+print ("20 Songs by", askArtist)
+print ("\n\n", GetArtistSongs(askArtist), "\n\n")
+
+# ### Movie Info ### 
+# (genre, movie name, director, description, buy and rent price)
+
+print ("\n*** iTunes Movie Data ***\n")
+
+def MakeMovieRequestToIT(movie):
+	it_baseurl = 'https://itunes.apple.com/search?'
+	it_url_params = {'term': movie, 'country' : 'US', 'entity': 'movie', 'limit' : '1'}
+	itunes_results = requestITURL(it_baseurl, it_url_params)
+	itunes_data = json.loads(itunes_results)
+	return itunes_data
+
+def GetMovieInfo(movie):
+	itunes_data = MakeMovieRequestToIT(movie)["results"][0]
+
+	# print (itunes_data)
+
+	movie_name = itunes_data["trackName"]
+	# director = itunes_data["artistName"]
+	# release_year = itunes_data["releaseDate"]
+	description = itunes_data["longDescription"]
+	movie_buyPrice = itunes_data["trackPrice"]
+	movie_rentPrice = itunes_data["trackRentalPrice"]
 	genre = itunes_data["primaryGenreName"]
 
-	songInfo_dict = {"song_name": song_name, "trackPrice": trackPrice, "artist": artist, "release_date": release_date, "genre": genre}
+	movieInfo_dict = {"movie_name": movie_name, "director": director, "description": description, "movie_buyPrice": movie_buyPrice, "movie_rentPrice": movie_rentPrice, "genre": genre}
 
-	return (songInfo_dict)
-	
+	return (movieInfo_dict)
 
-
-print ("*** iTunes Data ***\n", ExtractSongInfo("Passenger Side"))
-
-
-# Song Reviews     # get 100 song reviews
-# def ExtractSongReviews(song):
-# 	songReviews_list = []
+askMovie = input("Pick a movie to search: ")
+print (GetMovieInfo(askMovie))
 
 
+	################################ OMDb Results ##################################
+print ("\n*** OMDb Movie Data ***\n")
 
-# Movie Info (price, genre, release date, upvote/downvote(?))
-# def ExtractMovieInfo(movie):
-# 	self.movie = movie
+def MakeRequestToOMDb(movie):
+	omdb_baseurl = "http://www.omdbapi.com/?apikey=b95d25d9&"
+	omdb_params = {"t": movie, "type": "movie", "plot": "full", "r": "json"}
+	omdb_results = requestOMDbURL(omdb_baseurl, omdb_params)
+	omdb_data = json.loads(omdb_results)
+	return omdb_data
 
-# 	it_baseurl = 'https://itunes.apple.com/search?'
-#     it_url_params = {'term': , 'country' : 'US', 'entity': '', 'limit' : ''}
-#     itunes_results = requestITURL(it_baseurl, it_url_params)
-#     itunes_data = json.loads(itunes_results)
+# def GetMovieInfo(movie):
+# 	omdb_data = MakeRequestToOMDb(movie)[]
 
-#     self.itunes_data = itunes_data
-
-
-	################################ Spotify Results ##################################
-
-# Can't get track plays, not available with the current Spotify API
-# Changed to getting top ten tracks for an artist. Subject to change, most probably to song category type (aka genre)
-# ---Trouble getting access token??
-
-spotify = spotipy.Spotify()
-client_credentials_manager = SpotifyClientCredentials(client_id =  '2c93b879c5684c58a98aa0aa54147716', client_secret =  '40990bfb43ff499b881ed5c6b06ffd61')
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-
-def MakeRequestToSpotify(artist):
-	spotify_baseurl = "https://api.spotify.com"
-	spotify_params = sp.search(q= 'artist:' + artist, type= 'artist', limit= 1)
-	spotify_results = requestSpotifyURL(spotify_baseurl, spotify_params)
-	spotify_data = json.loads(spotify_results)
-	print ("\n\n*** Spotify Data ***\n", spotify_data)
-	return spotify_data
-
-# def ExtractArtistTopTracks(artist_id):
+# 	imdb_rating = omdb_data["imdbRating"]
+# 	release_date = omdb_data["Released"]
+# 	actors = omdb_data["Actors"]
+#	director = omdb_data["Director"]
 # 	pass
 
-print (MakeRequestToSpotify("Passenger Side"))
-
-	################################ YouTube Results ##################################
-
-def MakeRequestToYT(song):
-	# yt_baseurl = ""
-	# yt_params = 
-	# yt_results = 
-	# yt_data = 
-	# print ("\n\n*** YouTube Data ***\n", yt_data)
-	# return yt_data
-	pass
-
-
-
+print (MakeRequestToOMDb(askMovie))
 
 	############# Create & Load Database #############
 
-# conn = sqlite3.connect('FinalProject_DB.sqlite')
-# cur = conn.cursor()
+# movie = GetMovieInfo("askMovie")
 
-# cur.execute("DROP TABLE IF EXISTS Songs")
-# cur.execute("CREATE TABLE Songs (song_name TEXT PRIMARY KEY NOT NULL, artist TEXT NOT NULL, release_date TEXT NOT NULL, genre TEXT NOT NULL, review TEXT NOT NULL)")
+conn = sqlite3.connect('FinalProject_DB.sqlite')
+cur = conn.cursor()
 
-# conn.commit()
+cur.execute("DROP TABLE IF EXISTS Songs")
+cur.execute("CREATE TABLE Songs (artist TEXT PRIMARY KEY NOT NULL, song_name TEXT NOT NULL, release_date TEXT NOT NULL, genre TEXT NOT NULL, trackPrice TEXT NOT NULL)")
+
+for d in GetArtistSongs(askArtist):
+	tup = d["song_name"], d["artist"], d["trackPrice"], d["release_date"], d["genre"]
+	if len(cur.fetchall()) == 0:
+		cur.execute('INSERT INTO Songs (artist, song_name, release_date, genre, trackPrice) VALUES (?, ?, ?, ?, ?)', tup)
+
+
+
+conn.commit()
 
 # cur.execute("DROP TABLE IF EXISTS Movies")
 # cur.execute("CREATE TABLE Movies (movie_name TEXT PRIMARY KEY NOT NULL, genre TEXT NOT NULL, release_date TEXT NOT NULL)")
 
 # conn.commit()
 
-# cur.close()
+cur.close()
