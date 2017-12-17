@@ -2,15 +2,12 @@
 # Project 4
 # Name: Sarah Jomaa
 
-import unittest
-import itertools
-import collections
+# import itertools
+# import collections
 import json
 import sqlite3
 import requests
-import spotipy
-# from spotipy.oauth2 import SpotifyClientCredentials
-# from youtube import YouTube
+
 
 print ("\n\n********* NEW RUN **********\n\n")
 
@@ -47,12 +44,12 @@ def get_with_caching(base_url, params_diction, cache_diction, cache_file, omitte
 	# print ("full url: " + full_url)
 	if full_url in cache_diction:
 		# step 2
-		print ("\nIn cache. Retrieving cached data for URL: " + full_url, '\n')
+		# print ("\nIn cache. Retrieving cached data for URL: " + full_url, '\n')
 		return cache_diction[full_url]
 	else:
 		# step 3
 		response = requests.get(base_url, params=params_diction)
-		print ("\nNot in cache. Making a request to the API, adding data to cache for URL: " + full_url, '\n')
+		# print ("\nNot in cache. Making a request to the API, adding data to cache for URL: " + full_url, '\n')
 
 		# add to the cache and save it permanently
 		cache_diction[full_url] = response.text
@@ -63,7 +60,7 @@ def get_with_caching(base_url, params_diction, cache_diction, cache_file, omitte
 		return response.text
 
 
-	# iTunes API Request
+# iTunes API Request
 
 def requestITURL(baseurl, params = {}):
 	itunes_response = get_with_caching(baseurl, params, CACHE_DICTION, CACHE_FNAME)
@@ -71,13 +68,16 @@ def requestITURL(baseurl, params = {}):
 
 	# OMDb API Request
 
+# OMDb API Request
+
 def requestOMDbURL(baseurl, params = {}):
 	ombdb_response = get_with_caching(baseurl, params, CACHE_DICTION, CACHE_FNAME)
 	return ombdb_response
 
-	################################ iTunes Results ##################################
 
-# ### Song Info ###
+################################ iTunes Results ##################################
+
+# ##### Song Info #####
 # (song name, artist, price, release date, genre)
 
 print ("*** iTunes Artist's Songs Data ***\n")
@@ -103,11 +103,20 @@ def GetArtistSongs(artist):
 
 	return (returnedSongs)
 
-askArtist = input("Pick an artist to search: ")
-print ("20 Songs by", askArtist)
-print ("\n\n", GetArtistSongs(askArtist), "\n\n")
+#askArtist = input("Pick an artist to search: ")
+print ("19 Songs by {}: \n".format("Mikky Ekko")) #askArtist
+print ("\n", GetArtistSongs("Mikky Ekko"), "\n\n") #askArtist
 
-# ### Movie Info ### 
+def Top5Songs(artist):
+	topfiveSongs = []
+	for d in GetArtistSongs(artist):
+		topfiveSongs.append(d["song_name"])
+	return topfiveSongs[0:5]
+
+print ("Of those, {}'s top 5 songs are: \n".format("Mikky Ekko"), Top5Songs("Mikky Ekko"), "\n") #askArtist
+
+
+# ##### Movie Info ##### 
 # (genre, movie name, director, description, buy and rent price)
 
 print ("\n*** iTunes Movie Data ***\n")
@@ -132,15 +141,18 @@ def GetMovieInfo(movie):
 	movie_rentPrice = itunes_data["trackRentalPrice"]
 	genre = itunes_data["primaryGenreName"]
 
-	movieInfo_dict = {"movie_name": movie_name, "director": director, "description": description, "movie_buyPrice": movie_buyPrice, "movie_rentPrice": movie_rentPrice, "genre": genre}
+	movieInfo_dict = {"movie_name": movie_name, "description": description, "movie_buyPrice": movie_buyPrice, "movie_rentPrice": movie_rentPrice, "genre": genre}
 
 	return (movieInfo_dict)
 
-askMovie = input("Pick a movie to search: ")
-print (GetMovieInfo(askMovie))
+#askMovie = input("Pick a movie to search: ")
+print (GetMovieInfo("Pacific Rim")) #askMovie
+
 
 
 	################################ OMDb Results ##################################
+
+
 print ("\n*** OMDb Movie Data ***\n")
 
 def MakeRequestToOMDb(movie):
@@ -150,18 +162,35 @@ def MakeRequestToOMDb(movie):
 	omdb_data = json.loads(omdb_results)
 	return omdb_data
 
-# def GetMovieInfo(movie):
-# 	omdb_data = MakeRequestToOMDb(movie)[]
+def GetOMDbMovieInfo(movie):
+	omdb_data = MakeRequestToOMDb(movie)
 
-# 	imdb_rating = omdb_data["imdbRating"]
-# 	release_date = omdb_data["Released"]
-# 	actors = omdb_data["Actors"]
-#	director = omdb_data["Director"]
-# 	pass
+	imdb_rating = omdb_data["imdbRating"]
+	release_date = omdb_data["Released"]
+	actors = omdb_data["Actors"]
+	director = omdb_data["Director"]
+	movieInfo_dict = {"imdb_rating": imdb_rating, "release_date": release_date, "actors": actors, "director": director}
+	
+	return movieInfo_dict
 
-print (MakeRequestToOMDb(askMovie))
+# print (MakeRequestToOMDb("Pacific Rim")) #askMovie
+print (GetOMDbMovieInfo("Pacific Rim"))
 
-	############# Create & Load Database #############
+
+### Combined Movie Data ###
+
+print ("\n*** Combined Movie Data ***")
+
+itunesMovieDict = GetMovieInfo("Pacific Rim")
+omdbMovieDict = GetOMDbMovieInfo("Pacific Rim")
+
+fullmovieInfo = {**itunesMovieDict, **omdbMovieDict}
+print ("\n", fullmovieInfo)
+
+
+
+	############### Create & Load Database ###############
+
 
 # movie = GetMovieInfo("askMovie")
 
@@ -169,10 +198,11 @@ conn = sqlite3.connect('FinalProject_DB.sqlite')
 cur = conn.cursor()
 
 cur.execute("DROP TABLE IF EXISTS Songs")
-cur.execute("CREATE TABLE Songs (artist TEXT PRIMARY KEY NOT NULL, song_name TEXT NOT NULL, release_date TEXT NOT NULL, genre TEXT NOT NULL, trackPrice TEXT NOT NULL)")
+cur.execute("CREATE TABLE Songs (artist TEXT NOT NULL, song_name TEXT NOT NULL, release_date TEXT NOT NULL, genre TEXT NOT NULL, trackPrice TEXT NOT NULL)")
 
-for d in GetArtistSongs(askArtist):
+for d in GetArtistSongs("Mikky Ekko"): #askArtist
 	tup = d["song_name"], d["artist"], d["trackPrice"], d["release_date"], d["genre"]
+	cur.execute('SELECT artist FROM Songs WHERE artist = ?',(tup[1],))
 	if len(cur.fetchall()) == 0:
 		cur.execute('INSERT INTO Songs (artist, song_name, release_date, genre, trackPrice) VALUES (?, ?, ?, ?, ?)', tup)
 
