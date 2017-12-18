@@ -1,0 +1,41 @@
+Last login: Sun Dec 17 20:07:03 on ttys000
+Sarahs-MacBook-Pro-3:~ SarahJomaa$ cd /Users/SarahJomaa/FinalProject/
+Sarahs-MacBook-Pro-3:FinalProject SarahJomaa$ python FinalProject.py
+
+
+********* NEW RUN **********
+
+
+*** iTunes Artist's Songs Data ***
+
+Pick an artist to search: Kaleo
+19 Songs by Kaleo: 
+
+
+ [{'song_name': 'Way Down We Go', 'artist': 'Kaleo', 'trackPrice': 1.29, 'release_date': '2015-08-07', 'genre': 'Alternative'}, {'song_name': 'No Good', 'artist': 'Kaleo', 'trackPrice': 1.29, 'release_date': '2015-11-20', 'genre': 'Alternative'}, {'song_name': "I Can't Go On Without You", 'artist': 'Kaleo', 'trackPrice': 1.29, 'release_date': '2016-02-19', 'genre': 'Alternative'}, {'song_name': 'All the Pretty Girls', 'artist': 'Kaleo', 'trackPrice': 1.29, 'release_date': '2016-06-10', 'genre': 'Alternative'}, {'song_name': 'Save Yourself', 'artist': 'Kaleo', 'trackPrice': 1.29, 'release_date': '2016-06-10', 'genre': 'Alternative'}, {'song_name': 'Broken Bones', 'artist': 'Kaleo', 'trackPrice': 1.29, 'release_date': '2016-06-10', 'genre': 'Alternative'}, {'song_name': 'Hot Blood', 'artist': 'Kaleo', 'trackPrice': 1.29, 'release_date': '2016-06-10', 'genre': 'Alternative'}, {'song_name': 'Glass House', 'artist': 'Kaleo', 'trackPrice': 1.29, 'release_date': '2016-06-10', 'genre': 'Alternative'}, {'song_name': 'Vor í Vaglaskógi', 'artist': 'Kaleo', 'trackPrice': 1.29, 'release_date': '2015-10-13', 'genre': 'Alternative'}, {'song_name': 'Automobile', 'artist': 'Kaleo', 'trackPrice': 1.29, 'release_date': '2016-06-10', 'genre': 'Alternative'}, {'song_name': 'No Good', 'artist': 'Kaleo', 'trackPrice': 1.29, 'release_date': '2015-11-20', 'genre': 'Alternative'}, {'song_name': 'In Christ Alone', 'artist': 'Kaleo', 'trackPrice': 0.99, 'release_date': '2014-01-19', 'genre': 'Praise & Worship'}, {'song_name': 'Search Me Oh God', 'artist': 'Kaleo', 'trackPrice': 0.99, 'release_date': '2014-01-19', 'genre': 'Praise & Worship'}, {'song_name': "It's Raining Tonight", 'artist': 'Kaleo', 'trackPrice': 0.99, 'release_date': '2000-01-11', 'genre': 'Rock'}, {'song_name': 'You Will Prevail', 'artist': 'Kaleo', 'trackPrice': 0.99, 'release_date': '2014-01-19', 'genre': 'Praise & Worship'}, {'song_name': 'Rejoice', 'artist': 'Kaleo', 'trackPrice': 0.99, 'release_date': '2014-01-19', 'genre': 'Praise & Worship'}, {'song_name': 'Come', 'artist': 'Kaleo', 'trackPrice': 0.99, 'release_date': '2014-01-19', 'genre': 'Praise & Worship'}, {'song_name': 'Like a Fire', 'artist': 'Kaleo', 'trackPrice': 0.99, 'release_date': '2014-01-19', 'genre': 'Praise & Worship'}, {'song_name': 'How I Love You', 'artist': 'Kaleo', 'trackPrice': 0.99, 'release_date': '2014-01-19', 'genre': 'Praise & Worship'}] 
+
+
+Of those, Kaleo's top 5 songs are: 
+ ['Way Down We Go', 'No Good', "I Can't Go On Without You", 'All the Pretty Girls', 'Save Yourself'] 
+
+
+*** iTunes Movie Data ***
+
+Pick a movie title or a keyterm to search for a movie: 
+love
+{'movie_name': 'Live Die Repeat: Edge of Tomorrow', 'description': 'An alien race, undefeatable by any existing military unit, has launched a relentless attack on Earth, and Major William Cage (Tom Cruise) finds himself dropped into a suicide mission. Killed within minutes, Cage is thrown into a time loop, forced to live out the same brutal combat over and over, fighting and dying again and again. Training alongside warrior Rita Vrataski (Emily Blunt), his skills slowly evolve, and each battle moves them one step closer to defeating the enemy in this fun action thriller.', 'movie_buyPrice': 14.99, 'movie_rentPrice': 3.99, 'genre': 'Action & Adventure'}
+
+*** OMDb Movie Data ***
+
+{'imdb_rating': '6.0', 'release_date': '30 Oct 2015', 'actors': 'Aomi Muyock, Karl Glusman, Klara Kristin, Ugo Fox', 'director': 'Gaspar Noé'}
+
+*** Combined Movie Data ***
+
+{'movie_name': 'Live Die Repeat: Edge of Tomorrow', 'description': 'An alien race, undefeatable by any existing military unit, has launched a relentless attack on Earth, and Major William Cage (Tom Cruise) finds himself dropped into a suicide mission. Killed within minutes, Cage is thrown into a time loop, forced to live out the same brutal combat over and over, fighting and dying again and again. Training alongside warrior Rita Vrataski (Emily Blunt), his skills slowly evolve, and each battle moves them one step closer to defeating the enemy in this fun action thriller.', 'movie_buyPrice': 14.99, 'movie_rentPrice': 3.99, 'genre': 'Action & Adventure', 'imdb_rating': '6.0', 'release_date': '30 Oct 2015', 'actors': 'Aomi Muyock, Karl Glusman, Klara Kristin, Ugo Fox', 'director': 'Gaspar Noé'}
+
+Kaleo's song prices: [1.29, 1.29, 1.29, 1.29, 1.29, 1.29, 1.29, 1.29, 1.29, 1.29, 1.29, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99, 0.99]
+
+Creating Plotly visualization...
+
+High five! You successfully sent some data to your account on plotly. View your plot in your browser at https://plot.ly/~itsfriday19/0 or inside your plot.ly account where it is named 'SongsReleasedBy_DateAndPrice'
+Sarahs-MacBook-Pro-3:FinalProject SarahJomaa$ 

@@ -3,7 +3,7 @@
 APIs selected: iTunes, IMDb
 Visualization/package tools used: plot.ly
 
-libraries used: requests, json, sqlite3
+Required libraries: requests, json, sqlite3, plotly
 
 Instructions:
 Run the code and follow directions when prompted on screen.
