@@ -289,7 +289,7 @@ songline = go.Scatter(
     y = prices,
     mode = 'markers',  # data is shown in unconnected points. Available modes are markers, lines+markers, and lines
     name = 'Songs',	   # name of line in legend
-    line = dict(color = ('rgb(255, 187, 43)'), width = 2)  # color and width of the line
+    line = dict(color = ('rgb(255, 187, 43)'), width = 5)  # color and width of the line
 )
 
 data = [songline]
